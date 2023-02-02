@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FiInfo, FiMessageSquare, FiCheckCircle } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
-import { githubApi } from '../../api/githubApi';
 import { Issue } from '../interfaces';
 import { getIssueComments, getIssueInformation } from '../hooks/useIssue';
+import { timeSince } from '../../helpers';
 
 interface Props {
   issue: Issue;
@@ -24,10 +24,9 @@ export const IssueItem = ({ issue }: Props) => {
   };
 
   const preSetData = () => {
-    queryClient.setQueryData(['issue', issue.number], issue,{
-      updatedAt: new Date().getTime() * 10000
+    queryClient.setQueryData(['issue', issue.number], issue, {
+      updatedAt: new Date().getTime() * 10000,
     });
-
   };
 
   return (
@@ -35,9 +34,7 @@ export const IssueItem = ({ issue }: Props) => {
       className="mb-2 issue"
       onClick={() => navigate(`/issues/issue/${issue.number}`)}
       // onMouseEnter={prefetchData}
-      onMouseEnter={preSetData}
-      
-      >
+      onMouseEnter={preSetData}>
       <div className="flex items-center p-4 bg-white rounded-lg shadow-md">
         <div>
           {issue.state === 'closed' ? (
@@ -50,9 +47,20 @@ export const IssueItem = ({ issue }: Props) => {
         <div className="flex flex-col items-start pl-4">
           <span className="text-lg text-start">{issue.title}</span>
           <span className="text-sm text-gray-600">
-            #{issue.number} opened 2 days ago by{' '}
+            #{issue.number} opened {timeSince(issue.created_at)} ago by{' '}
             <span className="font-medium">{issue.user?.login}</span>
           </span>
+          <div className=''>
+            {issue.labels?.map((label) => (
+              <span
+                key={label.id}
+                className="px-2 py-1 text-[10px] text-gray-600 rounded-full text-ellipsis"
+                style={{ backgroundColor: `#${label.color}` }}
+                >
+                {label.name}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="flex mx-5 items-center ml-auto">
