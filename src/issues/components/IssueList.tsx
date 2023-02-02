@@ -1,6 +1,11 @@
+import { Issue } from '../interfaces';
 import { IssueItem } from './IssueItem';
 
-export const IssueList = () => {
+interface Props {
+  issues: Issue[];
+};
+
+export const IssueList = ({issues}: Props) => {
   return (
     <div className="bg-white p-2 rounded-lg shadow-md">
       <div className="bg-gray-800 p-2 text-white flex justify-between">
@@ -40,8 +45,8 @@ export const IssueList = () => {
         </ul>
       </div>
       <div className="p-2 text-gray-800">
-        {[1, 2, 3].map((issue) => (
-          <IssueItem key={issue} />
+        {issues.map((issue) => (
+          <IssueItem key={issue.id} issue={issue} />
         ))}
       </div>
     </div>

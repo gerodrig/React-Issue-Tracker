@@ -1,23 +1,24 @@
 import ReactMarkdown from 'react-markdown';
+import { Issue } from '../interfaces';
 
 interface Props {
-  body: string;
+  issue: Issue;
 }
 
-export const IssueComment = ({ body }: Props) => {
+export const IssueComment = ({ issue }: Props) => {
   return (
     <div className="w-full">
       <div className="bg-white p-2 mt-2 rounded-lg shadow-md">
         <div className="bg-gray-800 p-2 text-white flex items-center">
           <img
-            src="https://avatars.githubusercontent.com/u/1933404?v=4"
-            alt="User Avatar"
+            src={`${issue.user.avatar_url}`}
+            alt={`${issue.user.login} Avatar`}
             className="w-8 h-8 rounded-full"
           />
-          <span className="ml-2 text-lg">Pandaiolo commented</span>
+          <span className="ml-2 text-lg">{issue.user.login} commented</span>
         </div>
         <div className="p-2 text-gray-800 text-start">
-          <ReactMarkdown>{body}</ReactMarkdown>
+          <ReactMarkdown>{issue.body}</ReactMarkdown>
         </div>
       </div>
     </div>

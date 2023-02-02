@@ -1,4 +1,4 @@
-import { useLabels } from '../../hooks/useLabels';
+import { useLabels } from '../hooks/useLabels';
 import { LoadingIcon } from '../../share/components/LoadingIcon';
 import { Label } from '../interfaces/label';
 
