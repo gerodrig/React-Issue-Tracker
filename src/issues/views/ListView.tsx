@@ -17,7 +17,7 @@ export const ListView = () => {
   return (
     <div className="flex mt-5 mx-12">
       <div className="w-2/3">
-        {issuesQuery.isLoading ? <LoadingIcon /> : <IssueList issues={issuesQuery.data || []}/>}
+        {issuesQuery.isLoading ? <LoadingIcon className='mx-auto mt-5'/> : <IssueList issues={issuesQuery.data || []}/>}
       </div>
       <div className="w-1/3">
         <LabelPicker

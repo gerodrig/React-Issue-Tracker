@@ -1,19 +1,46 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { FiInfo, FiMessageSquare, FiCheckCircle } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
+import { githubApi } from '../../api/githubApi';
 import { Issue } from '../interfaces';
+import { getIssueComments, getIssueInformation } from '../hooks/useIssue';
 
 interface Props {
   issue: Issue;
 }
 
 export const IssueItem = ({ issue }: Props) => {
-  //navigate to issue detail page
   const navigate = useNavigate();
+  const queryClient = useQueryClient({});
+
+  const prefetchData = () => {
+    queryClient.prefetchQuery(['issue', issue.number], () =>
+      getIssueInformation(issue.number)
+    );
+
+    queryClient.prefetchQuery(['issue', issue.number, 'comments'], () =>
+      getIssueComments(issue.number)
+    );
+  };
+
+  const preSetData = () => {
+    queryClient.setQueryData(['issue', issue.number], issue,{
+      updatedAt: new Date().getTime() * 10000
+    });
+
+  };
+
   return (
-    <div className="mb-2 issue" onClick={() => navigate(`/issues/issue/${issue.number}`)}>
+    <div
+      className="mb-2 issue"
+      onClick={() => navigate(`/issues/issue/${issue.number}`)}
+      // onMouseEnter={prefetchData}
+      onMouseEnter={preSetData}
+      
+      >
       <div className="flex items-center p-4 bg-white rounded-lg shadow-md">
         <div>
-          {issue.state === "closed" ? (
+          {issue.state === 'closed' ? (
             <FiCheckCircle size={30} color="green" />
           ) : (
             <FiInfo size={30} color="red" />

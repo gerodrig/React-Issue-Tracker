@@ -1,7 +1,11 @@
-import { FaSpinner } from 'react-icons/fa'
+import { FaSpinner } from 'react-icons/fa';
 
-export const LoadingIcon = () => {
+interface Props {
+    className?: string;
+}
+
+export const LoadingIcon = ({className = ''}: Props) => {
     return (
-        <FaSpinner className="animate-spin block " />
+        <FaSpinner className={`animate-spin block ${className}`} />
     )
 }
