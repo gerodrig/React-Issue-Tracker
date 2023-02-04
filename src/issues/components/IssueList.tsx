@@ -1,15 +1,21 @@
-import { Issue, State } from '../interfaces';
+import { useIsFetching } from '@tanstack/react-query';
+
 import { IssueItem } from './IssueItem';
+import { LoadingIcon } from '../../share/components/LoadingIcon';
+
+import { Issue, State } from '../interfaces';
 
 interface Props {
   issues: Issue[];
   state?: State;
   onStateChanged: (newState?: State) => void;
-};
+}
 
-export const IssueList = ({issues, state, onStateChanged}: Props) => {
+export const IssueList = ({ issues, state, onStateChanged }: Props) => {
+  const isFetching = useIsFetching();
+
   const activeClass = 'border border-blue-500  bg-blue-500 text-white';
-  const inactiveClass = 'hover:border-gray-200 text-blue-500 hover:bg-gray-200'
+  const inactiveClass = 'hover:border-gray-200 text-blue-500 hover:bg-gray-200';
   return (
     <div className="bg-white p-2 rounded-lg shadow-md">
       <div className="bg-gray-800 p-2 text-white flex justify-between">
@@ -27,25 +33,28 @@ export const IssueList = ({issues, state, onStateChanged}: Props) => {
         <ul className="flex">
           <li className="mr-3">
             <a
-              className={`inline-block rounded py-1 px-3 hover:cursor-pointer ${ !state ? activeClass : inactiveClass}`}
-              onClick={() => onStateChanged()}
-              >
+              className={`inline-block rounded py-1 px-3 hover:cursor-pointer ${
+                !state ? activeClass : inactiveClass
+              }`}
+              onClick={() => onStateChanged()}>
               All
             </a>
           </li>
           <li className="mr-3">
             <a
-              className={`inline-block rounded py-1 px-3 hover:cursor-pointer ${ state === 'open' ? activeClass : inactiveClass}`}
-              onClick={() => onStateChanged('open')}
-              >
+              className={`inline-block rounded py-1 px-3 hover:cursor-pointer ${
+                state === 'open' ? activeClass : inactiveClass
+              }`}
+              onClick={() => onStateChanged('open')}>
               Open
             </a>
           </li>
           <li className="mr-3">
-          <a
-              className={`inline-block rounded py-1 px-3 hover:cursor-pointer ${ state === 'closed'  ? activeClass : inactiveClass}`}
-              onClick={() => onStateChanged('closed')}
-              >
+            <a
+              className={`inline-block rounded py-1 px-3 hover:cursor-pointer ${
+                state === 'closed' ? activeClass : inactiveClass
+              }`}
+              onClick={() => onStateChanged('closed')}>
               Closed
             </a>
           </li>
@@ -56,6 +65,7 @@ export const IssueList = ({issues, state, onStateChanged}: Props) => {
           <IssueItem key={issue.id} issue={issue} />
         ))}
       </div>
+      {isFetching ? <LoadingIcon className="mx-auto my-5" /> : null}
     </div>
   );
 };
